@@ -50,6 +50,8 @@ class Submission(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=["student", "exam"]) ]
+       
+        unique_together = ("student", "exam")
 
     def __str__(self):
         return f"Submission {self.id} by {self.student} for {self.exam}"

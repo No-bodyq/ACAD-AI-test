@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-x)qng0q&w2)@s3l@^nb@q6itk-sku541od&dilw=5tn-x$9h6g"
+
+# Grading Configuration
+GRADING_STRATEGY = os.getenv('GRADING_STRATEGY', 'mock')
+
+# LLM API Keys
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

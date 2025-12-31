@@ -53,35 +53,63 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         exam_id = serializer.validated_data["exam"]
         exam = get_object_or_404(Exam, pk=exam_id)
+        # create Submission and grade using configured grader
+        from django.db import transaction
 
-        # create Submission
-        submission = Submission.objects.create(student=request.user, exam=exam)
+        grader_instance = grader.get_default_grader()
 
-        total_awarded = 0.0
-        total_points = 0.0
-
-        # create Answer objects and grade
-        for ans in serializer.validated_data["answers"]:
-            q = get_object_or_404(Question, pk=ans["question"])
-            answer = Answer.objects.create(
-                submission=submission,
-                question=q,
-                answer_text=ans.get("answer_text"),
-                selected_choice=ans.get("selected_choice"),
+        # prevent duplicate submissions for non-staff users
+        if not request.user.is_staff and Submission.objects.filter(student=request.user, exam=exam).exists():
+            return Response(
+                {"detail": "A submission for this exam already exists for this student."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-            awarded, points = grader.grade_question(q, answer)
-            answer.points_awarded = awarded
-            answer.save(update_fields=["points_awarded"])
-            total_awarded += awarded
-            total_points += points
 
-        # finalize submission
-        submission.submitted_at = submission.started_at
-        submission.graded = True
-        submission.grade = round((total_awarded / total_points) * 100.0, 2) if total_points else 0.0
-        submission.save(update_fields=["submitted_at", "graded", "grade"])
+        with transaction.atomic():
+            submission = Submission.objects.create(student=request.user, exam=exam)
 
-        return Response(SubmissionSerializer(submission).data, status=status.HTTP_201_CREATED)
+            total_awarded = 0.0
+            total_points = 0.0
+            feedback_map = {}
+
+            # create Answer objects and grade
+            question_map = serializer.validated_data.get("question_map", {})
+            for ans in serializer.validated_data["answers"]:
+                q = question_map.get(ans["question"]) or get_object_or_404(Question, pk=ans["question"])
+                answer = Answer.objects.create(
+                    submission=submission,
+                    question=q,
+                    answer_text=ans.get("answer_text"),
+                    selected_choice=ans.get("selected_choice"),
+                )
+
+                # grader.grade_question returns a dict with points_awarded, points_possible, feedback
+                result = grader.grade_question(q, answer, grader=grader_instance)
+                awarded = result.get("points_awarded", 0.0)
+                points = result.get("points_possible", 0.0)
+                fb = result.get("feedback")
+
+                answer.points_awarded = awarded
+                answer.save(update_fields=["points_awarded"])
+
+                total_awarded += awarded
+                total_points += points
+                feedback_map[answer.id] = fb
+
+            # finalize submission
+            submission.submitted_at = submission.started_at
+            submission.graded = True
+            submission.grade = round((total_awarded / total_points) * 100.0, 2) if total_points else 0.0
+            submission.save(update_fields=["submitted_at", "graded", "grade"])
+
+        # Prepare response and attach per-answer feedback (not persisted)
+        response_data = SubmissionSerializer(submission).data
+        for a in response_data.get("answers", []):
+            a_id = a.get("id")
+            if a_id in feedback_map:
+                a["feedback"] = feedback_map.get(a_id)
+
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
