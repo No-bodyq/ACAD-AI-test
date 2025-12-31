@@ -73,7 +73,7 @@ class MockGrader(BaseGrader):
 class GeminiGrader(BaseGrader):
     """LLM-based grading using Google Gemini API."""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-1.5-flash"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.5-flash"):
         """
         Initialize Gemini grader.
         
@@ -86,7 +86,7 @@ class GeminiGrader(BaseGrader):
         except ImportError:
             raise ImportError("Install google-generativeai: pip install google-generativeai")
         
-        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
+        self.api_key = api_key or os.getenv("GOOGLE_API_KEY") 
         if not self.api_key:
             raise ValueError("Google API key not provided")
         

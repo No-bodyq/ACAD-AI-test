@@ -1,0 +1,196 @@
+{
+  "info": {
+    "_postman_id": "acad-ai-mini-assessment",
+    "name": "Acad AI - Mini Assessment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create User (signup)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"newstudent\",\n  \"email\": \"newstudent@example.com\",\n  \"password\": \"secret123\",\n  \"first_name\": \"\",\n  \"last_name\": \"\",\n  \"is_staff\": false,\n  \"is_active\": true,\n  \"date_joined\": \"2025-12-31T09:10:23.061134Z\"\n}"
+        },
+        "url": "{{base_url}}/api/users/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.token) { pm.environment.set('token', json.token); }",
+              "if (json.id) { pm.environment.set('user_id', json.id); }",
+              "pm.test('created user', function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": "{{base_url}}/api/users/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.token) { pm.environment.set('token', json.token); }",
+              "pm.test('token received', function () { pm.response.to.have.property('code', 200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Exams",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/api/exams/"
+      }
+    },
+    {
+      "name": "Get Exam (by id)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/api/exams/{{exam_id}}/"
+      }
+    },
+    {
+      "name": "Create Exam (admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Sample Exam\",\n  \"description\": \"Short exam for testing\"\n}"
+        },
+        "url": "{{base_url}}/api/exams/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.id) { pm.environment.set('exam_id', json.id); }",
+              "pm.test('created exam', function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Question (admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"exam\": {{exam_id}},\n  \"text\": \"What is 2+2?\",\n  \"question_type\": \"mcq\",\n  \"choices\": [\"A: 3\", \"B: 4\", \"C: 5\"],\n  \"correct_choice\": \"B\"\n}"
+        },
+        "url": "{{base_url}}/api/questions/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.id) { pm.environment.set('q1_id', json.id); }",
+              "pm.test('created question', function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Questions",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/api/questions/?exam={{exam_id}}"
+      }
+    },
+    {
+      "name": "Create Submission (by question id)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"exam\": {{exam_id}},\n  \"answers\": [\n    {\"question\": {{q1_id}}, \"selected_choice\": \"B\"}\n  ]\n}"
+        },
+        "url": "{{base_url}}/api/submissions/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.id) { pm.environment.set('submission_id', json.id); }",
+              "pm.test('submission created', function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Submission (by id)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "url": "{{base_url}}/api/submissions/{{submission_id}}/"
+      }
+    },
+    {
+      "name": "List Submissions",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "url": "{{base_url}}/api/submissions/"
+      }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// If you want a global pre-request action, add it here.\n// Example: set Authorization header if token exists in environment:\n// pm.request.headers.add({key: 'Authorization', value: 'Token ' + pm.environment.get('token')});"
+        ]
+      }
+    }
+  ]
+}
