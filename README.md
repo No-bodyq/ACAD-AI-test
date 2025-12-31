@@ -39,11 +39,15 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
 5. (Optional) Create a token for a user via management command:
 
+   ```bash
    python manage.py drf_create_token <username>
+   ```
 
 6. Run the server:
 
+   ```bash
    python manage.py runserver
+   ```
 
 ## Environment variables
 
