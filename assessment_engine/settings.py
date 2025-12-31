@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-x)qng0q&w2)@s3l@^nb@q6itk-sku541od&dilw=5tn-x$9h6g
 GRADING_STRATEGY = os.getenv('GRADING_STRATEGY', 'mock')
 
 # LLM API Keys
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', 'AIzaSyA0u-vFuK__ywnoV7kGUWPBQKJvid_0AW4')
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
