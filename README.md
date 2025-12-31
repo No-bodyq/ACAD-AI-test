@@ -26,23 +26,20 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
    # Optional for Gemini grading
 
+   ```bash
    pip install google-generativeai
+   ```
 
 4. Apply migrations and create a superuser:
 
+   ```bash
    python manage.py migrate
    python manage.py createsuperuser
+   ```
 
 5. (Optional) Create a token for a user via management command:
 
    python manage.py drf_create_token <username>
-
-   If you prefer, you can POST to `/api-token-auth/` if you add the following to your project `urls.py`:
-
-   ```py
-   from rest_framework.authtoken.views import obtain_auth_token
-   path('api-token-auth/', obtain_auth_token),
-   ```
 
 6. Run the server:
 
