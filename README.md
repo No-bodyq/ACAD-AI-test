@@ -4,10 +4,10 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
 ## Quick setup (Windows, Git Bash / bash)
 
-1. Clone repository and change into project root -> assessment_engine:
+1. Clone repository and change into project root:
 
    ```bash
-   cd <assessment_engine>
+   cd ACAD-AI-test
    ```
 
 2. Create and activate a virtual environment (if not already):
