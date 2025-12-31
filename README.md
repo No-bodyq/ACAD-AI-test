@@ -6,12 +6,16 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
 1. Clone repository and change into project root (this repo already in workspace):
 
-   cd /c/Users/thefo/OneDrive/Desktop/Projects/Acad\ AI/assessment_engine
+   ```bash
+   cd <assessment_engine>
+   ```
 
 2. Create and activate a virtual environment (if not already):
 
+   ```bash
    python -m venv venv
    source venv/Scripts/activate
+   ```
 
 3. Install required packages (recommended):
 
