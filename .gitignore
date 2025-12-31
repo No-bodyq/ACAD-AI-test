@@ -1,0 +1,114 @@
+# Byte-compiled / optimized / DLLs
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pyenv / python version files
+.python-version
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+venv.bak/
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+.poetry/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# Mypy, pyright
+.mypy_cache/
+.pyright/
+.pyre/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+# If you commit collected static files, remove the next line; otherwise ignore staticfiles
+staticfiles/
+
+# Environment / secrets
+.env
+.env.*
+credentials.ini
+.secret
+*.pem
+*.key
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter
+.ipynb_checkpoints
+
+# Node / frontend (if present)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.yarn-integrity
+
+# Build outputs
+dist/
+tmp/
+*.log
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Sphinx
+docs/_build/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Gitkraken/worktree etc
+/.gitkraken/
+*.orig
