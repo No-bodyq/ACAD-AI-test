@@ -4,7 +4,7 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
 ## Quick setup (Windows, Git Bash / bash)
 
-1. Clone repository and change into project root (this repo already in workspace):
+1. Clone repository and change into project root -> assessment_engine:
 
    ```bash
    cd <assessment_engine>
@@ -19,8 +19,10 @@ This repository contains a Django + DRF mini assessment engine used for backend 
 
 3. Install required packages (recommended):
 
+   ```bash
    pip install -U pip
    pip install django djangorestframework djangorestframework-authtoken
+   ```
 
    # Optional for Gemini grading
 
